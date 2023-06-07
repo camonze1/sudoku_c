@@ -5,32 +5,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//matrice possility element
-struct mpe {
+// matrice possility element
+struct mpe
+{
     char element;
-    struct mpe* next;
+    struct mpe *next;
 };
 
-
-//matrice possility list
-struct mpl {
-    struct mpe* load;
+// matrice possility list
+struct mpl
+{
+    struct mpe *load;
     int nb_elem;
-    struct mpe* current_element;
+    struct mpe *current_element;
 };
 
-struct matrice_possibility {
-    struct mpl* possibilities[9][9];
+struct matrice_possibility
+{
+    struct mpl *possibilities[9][9];
 };
 
 /**
  * @brief structure contenant un sudoku
  * @property identifiant chaine de caractère de 10 (attention il y a un piège)
  * @property matrice de caractères contenant les donnees du sudoku (9 par 9 case)
- * @property nb_iteration un entier non signé permettant de voir combien d'iteration on été réalisée
+ * @property nb_iteration un entsier non signé permettant de voir combien d'iteration on été réalisée
  */
-struct sudoku_exercice {
-    //todo pre-proj : : fill the structure
+struct sudoku_exercice
+{
+    // fill the structure
+    char identifiant[11];
+    char matrice[9][9];
+    unsigned int nb_iteration;
 };
 
 /**
@@ -38,8 +44,8 @@ struct sudoku_exercice {
  * @param exerc un pointer sur la structure à initialiser
  * @note memset ? tous les champs ne seront pas intialisés avec la même valeur
  */
- //todo pre-proj : create the function
-void init_sudoku_exercice(struct sudoku_exercice* exerc);
+// todo pre-proj : create the function
+void init_sudoku_exercice(struct sudoku_exercice *exerc);
 
 /**
  * @brief structure de liste contenant un element sudoku exercice
@@ -47,10 +53,13 @@ void init_sudoku_exercice(struct sudoku_exercice* exerc);
  * @property next un pointer sur l'element suivant
  * @property sudoku un pointeur sur l'exercice
  */
-struct sudoku_element {
-    //todo pre-proj : : fill the structure
+struct sudoku_element
+{
+    // todo pre-proj : : fill the structure
+    struct sudoku_element *prev;
+    struct sudoku_element *next;
+    struct sudoku_exercice *sudoku;
 };
-
 
 /**
  * @brief structure encapsulant une liste de sudoku element. Permet de realiser toutes les opérations sur la liste
@@ -59,8 +68,12 @@ struct sudoku_element {
  * @property nb_element un entier non signé contenant le nombre d'élément présentement dans la liste.
  * @note il aurait été tout à fait possible de se passer de cette structure mais elle est pratique
  */
-struct sudoku_list {
-    //todo pre-proj : : fill the structure
+struct sudoku_list
+{
+    // todo pre-proj : : fill the structure
+    struct sudoku_element *load;
+    struct sudoku_element *first;
+    unsigned int nb_element;
 };
 
 /**
@@ -68,9 +81,13 @@ struct sudoku_list {
  * @property exerc un pointeur sur le sudoku exercice
  * @property matrice un pointeur sur la matrice des possibilités
  * @property nb_iteration le nombre d'itérations qui seront nécessaires pour résoudre le sudoku
-*/
-struct sudoku_exercice_solve {
-    //todo pre-proj : : fill the structure
+ */
+struct sudoku_exercice_solve
+{
+    // todo pre-proj : : fill the structure
+    struct sudoku_exercice *exerc;
+    struct matrice_possibility *matrice;
+    unsigned int nb_iteration;
 };
 
 /**
@@ -78,13 +95,13 @@ struct sudoku_exercice_solve {
  * @param from_data un pointer sur la structure qui sera copiée
  * @return un pointer sur la copie du sudoku exercice. allocation dynamique de memoire
  */
-struct sudoku_exercice* copy_sudoku_exercice(struct sudoku_exercice* from_data);
+struct sudoku_exercice *copy_sudoku_exercice(struct sudoku_exercice *from_data);
 
 /**
  * @brief init_matrice initialise une matrice en allouant dynamiquement de la mémoire, met toute la structure à 0
  * @return un pointer sur la matrice alouée dynamiquement
  */
-struct matrice_possibility* init_matrice();
+struct matrice_possibility *init_matrice();
 
 /**
  * @brief compute_matrice permet de remplir la matrice en fonction des différentes possibilité du sudoku exercice passé en paramètre
@@ -93,7 +110,7 @@ struct matrice_possibility* init_matrice();
  * @param exerc le sudoku exercice contenant les informations de base
  * @return un entier qui ne sera pas utilisé
  */
-int compute_matrice(struct matrice_possibility* matrice, struct sudoku_exercice *exerc);
+int compute_matrice(struct matrice_possibility *matrice, struct sudoku_exercice *exerc);
 
 /**
  * @brief compute_possibility coeur de resolution des sudokus. Cette fonction prend en paramètre la matrice des possibilités et recherche la première case
@@ -108,7 +125,7 @@ int compute_matrice(struct matrice_possibility* matrice, struct sudoku_exercice 
  *      > -1 : le calcul n'abouti pas (la valeur fixée ne peut pas etre la bonne)
  *      > 81 : toutes les valeurs on été fixées et une seule valeur valide a été choisie par case. On a donc résolu le sudoku et on peut passer au suivant.
  */
-int compute_possibility(struct matrice_possibility* matrice, int* nb_possibility);
+int compute_possibility(struct matrice_possibility *matrice, int *nb_possibility);
 
 /**
  * @brief compute_uplet permet de savoir si la valeur de la matrice à la case line:colonne est valide dans la ligne line et dans la colonne colonne
@@ -117,7 +134,7 @@ int compute_possibility(struct matrice_possibility* matrice, int* nb_possibility
  * @param colonne la colonne que l'on vérifie
  * @return -1 si la valeur n'est pas bonne (elle est deja presente de façon unique dans la ligne et dans la colonne), 1 sinon
  */
-int compute_uplet(struct matrice_possibility* matrice, int line, int colonne);
+int compute_uplet(struct matrice_possibility *matrice, int line, int colonne);
 
 /**
  * @brief contain_char_mpe permet de savoir si une liste de valeurs possibles (une case de la matrice de possibilités ayant plus d'une valeur)
@@ -126,21 +143,21 @@ int compute_uplet(struct matrice_possibility* matrice, int line, int colonne);
  * @param e la liste de valeur possibles dans laquelle l'on va fare la recherche
  * @return -1 si la valeur est présente dans la liste, le nombre d'element de la liste sinon
  */
-int contain_char_mpe(char c, struct mpl* e);
+int contain_char_mpe(char c, struct mpl *e);
 
 /**
  * @brief delete_mpl supprime l'ensemble des elements alloués dynamiquement de la liste passée en paramètre un par un
  * @param mpl_to_delete la liste que l'on souhaite supprimer
  * @note ne pas oublier de supprimer la structure list en desalouant la mémoire à l'aide d'un free et de mettre le pointer à NULL
  */
-void delete_mpl(struct mpl* mpl_to_delete);
+void delete_mpl(struct mpl *mpl_to_delete);
 
 /**
  * @brief delete_matrice supprime l'ensemble de la matrice de possibilité, notament toutes les listes de valeurs possibles qui la compose
  * @param matrice la matrice que l'on souhaite supprimer
  * @note ne pas oublier de supprimer la structure matrice en desalouant la mémoire à l'aide d'un free et de mettre le pointer à NULL
  */
-void delete_matrice(struct matrice_possibility* matrice);
+void delete_matrice(struct matrice_possibility *matrice);
 
 /**
  * @brief solve_exercice resout completement un exercice sudoku
@@ -148,7 +165,7 @@ void delete_matrice(struct matrice_possibility* matrice);
  * @param exerc l'exercice de sudoku qui sert de base de travail
  * @return un pointer sur l'exercice solve alloué dynamiquement et constitué dans la fonction
  */
-struct sudoku_exercice_solve* solve_exercice(struct sudoku_exercice* exerc);
+struct sudoku_exercice_solve *solve_exercice(struct sudoku_exercice *exerc);
 
 /**
  * @brief compute_complexity_correct renvoie la complexité de la matrice, c'est à dire le nombre de valeurs possibles dans cette matrice
@@ -162,7 +179,7 @@ struct sudoku_exercice_solve* solve_exercice(struct sudoku_exercice* exerc);
  * @note a chaque fois qu'une valeur est choisie, la complexité diminiue ou alors est égale à -1 (la valeur fixée n'est pas une valeur possible selon les
  * règles du sudoku)
  */
-int compute_complexity(struct matrice_possibility* possibility);
+int compute_complexity(struct matrice_possibility *possibility);
 
 /**
  * @brief fill_sudoku_exerc_with_matrice_correct prend toutes les valeurs de la matrice de possibilités et les met dans la matrice du sudoku
@@ -170,13 +187,13 @@ int compute_complexity(struct matrice_possibility* possibility);
  * @param possi la matrice qui sert d'informations
  * @note a n'appeler qu'une fois que la complexité de la matrice est de 81. Apres cette fonction, si la matrice de possibilité est valide, le sudoku est resolu et peut etre affiché
  */
-void fill_sudoku_exerc_with_matrice(struct sudoku_exercice* exerc, struct matrice_possibility* possi);
+void fill_sudoku_exerc_with_matrice(struct sudoku_exercice *exerc, struct matrice_possibility *possi);
 
 /**
  * @brief delete_tab_exercice supprime la liste de sudoku
  * @param list un pointer sur la liste ou supprimer les element
  */
-void delete_tab_exercice(struct sudoku_list* list);
+void delete_tab_exercice(struct sudoku_list *list);
 
 /**
  * @brief initialize une liste de sudoku
@@ -184,19 +201,18 @@ void delete_tab_exercice(struct sudoku_list* list);
  * @note lors de l'initialisation, la liste doit être vide et ses variables complètement intialisées.
  * Si la liste n'est pas vide, faire un message d'erreur et ne rien faire de plus
  */
-void init_list_sudoku(struct sudoku_list* list);
+void init_list_sudoku(struct sudoku_list *list);
 
 /**
  * @brief print_sudoku_element affiche un sudoku element dans la console
  * @param elem un pointer sur l'element a afficher
  */
-void print_sudoku_element(struct sudoku_element* elem);
+void print_sudoku_element(struct sudoku_element *elem);
 
 /**
  * @brief initialise le tableau de sudoku
  * @param list un pointer sur la liste ou l'on va stocker les resultats de la génération
  */
-void init_tab_exercice(struct sudoku_list* list);
-
+void init_tab_exercice(struct sudoku_list *list);
 
 #endif // SUDOKU_FUNCTIONS_H
