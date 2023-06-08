@@ -30,18 +30,16 @@ struct matrice_possibility {
  * @property nb_iteration un entier non signé permettant de voir combien d'iteration on été réalisée
  */
 struct sudoku_exercice {
-    //todo pre-proj : : fill the structure
     char identifiant[11];
     char matrice[9][9];
     unsigned int nb_iteration;
 };
 
 /**
- * @brief init_sudoku_exercice permet d'initialiser un sudoku exercice
+ * @brief init_sudoku_exercice permet d'initialiser un sodoku exercice
  * @param exerc un pointer sur la structure à initialiser
  * @note memset ? tous les champs ne seront pas intialisés avec la même valeur
  */
- //todo pre-proj : create the function
 void init_sudoku_exercice(struct sudoku_exercice* exerc);
 
 /**
@@ -51,7 +49,6 @@ void init_sudoku_exercice(struct sudoku_exercice* exerc);
  * @property sudoku un pointeur sur l'exercice
  */
 struct sudoku_element {
-    //todo pre-proj : : fill the structure
     struct sudoku_element* prev;
     struct sudoku_element* next;
     struct sudoku_exercice* sudoku;
@@ -66,7 +63,6 @@ struct sudoku_element {
  * @note il aurait été tout à fait possible de se passer de cette structure mais elle est pratique
  */
 struct sudoku_list {
-    //todo pre-proj : : fill the structure
     struct sudoku_element* load;
     struct sudoku_element* first;
     unsigned int nb_element;
@@ -79,11 +75,18 @@ struct sudoku_list {
  * @property nb_iteration le nombre d'itérations qui seront nécessaires pour résoudre le sudoku
 */
 struct sudoku_exercice_solve {
-    //todo pre-proj : : fill the structure
     struct sudoku_exercice* exerc;
     struct matrice_possibility* matrice;
     int nb_iteration;
 };
+
+/**
+ * @brief initialize une liste de sudoku
+ * @param list_to_init un pointer sur la liste à initialiser
+ * @note lors de l'initialisation, la liste doit être vide et ses variables complètement intialisées.
+ * Si la liste n'est pas vide, faire un message d'erreur et ne rien faire de plus
+ */
+void init_list_sudoku(struct sudoku_list* list);
 
 /**
  * @brief copy_sudoku_exercice renvoie une copie du sudoku exercice passé en paramètre
@@ -191,14 +194,6 @@ void fill_sudoku_exerc_with_matrice(struct sudoku_exercice* exerc, struct matric
 void delete_tab_exercice(struct sudoku_list* list);
 
 /**
- * @brief initialize une liste de sudoku
- * @param list_to_init un pointer sur la liste à initialiser
- * @note lors de l'initialisation, la liste doit être vide et ses variables complètement intialisées.
- * Si la liste n'est pas vide, faire un message d'erreur et ne rien faire de plus
- */
-void init_list_sudoku(struct sudoku_list* list);
-
-/**
  * @brief print_sudoku_element affiche un sudoku element dans la console
  * @param elem un pointer sur l'element a afficher
  */
@@ -238,6 +233,16 @@ void init_sudoku_element(struct sudoku_element* elem);
  * @return -1 si une des cases de la matrice ne contient pas d'éléments
  */
 int print_possibility_matrice(struct matrice_possibility* possibility);
+
+/**
+ * @brief compute_carre permet de savoir si la valeur de la matrice à la case line:colonne est valide dans le carré
+ * @param matrice la matrice dans laquelle l'on vérifie les informations
+ * @param line la ligne que l'on vérifie
+ * @param colonne la colonne que l'on vérifie
+ * @return -1 si la valeur n'est pas bonne (elle est deja presente de façon unique dans le carre), 1 sinon
+ */
+int compute_carre(struct matrice_possibility* possibility, int line, int col);
+
 
 
 #endif // SUDOKU_FUNCTIONS_H
